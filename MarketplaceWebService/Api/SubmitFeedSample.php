@@ -29,8 +29,7 @@
             return false;
         }
         //check file size 10 mb
-
-        if ($_FILES["productupload"]["size"] < 10000000) 
+        if ($_FILES["productupload"]["size"] > 10000000) 
         {
             $result         =   array(
                                 'Result'=>0,
@@ -81,7 +80,7 @@
     // 	    					</Message>
     // 						</AmazonEnvelope>
     // EOD;
-        $filename   =   $_FILES["productupload"]["tmp_name"];
+        $filename   =   $_FILES["productupload"]["tmp_name"].'.'.$_FILES['productupload']['name'];
         // $row = 1;
         // if (($handle = fopen($filename, "r")) !== FALSE) 
         // {
@@ -111,11 +110,14 @@
 		invokeSubmitFeed($service, $request);
 		@fclose($feedHandle);
     }
-	$result    =   array(
+    else
+    {
+	   $result    =   array(
                             'Result'=>0,
                             'Message'=>'Invalid Access'
                             );   
-    echo json_encode([$result]);
+        echo json_encode([$result]);
+    }
 
 	function invokeSubmitFeed(MarketplaceWebService_Interface $service, $request) 
   	{

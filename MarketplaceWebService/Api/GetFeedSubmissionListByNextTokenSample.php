@@ -26,7 +26,7 @@
 			echo json_encode([$result]);    
 			return false;
 	    }
-	    
+
 		$config 	= 	array 
 							(
 								'ServiceURL' => MWSSERVICEURL,
@@ -55,11 +55,14 @@
 
 		invokeGetFeedSubmissionListByNextToken($service, $request);
 	}
-	$result   	=	array(
-  							'Result'=>0,
-							'Message'=>'Invalid Access'
-							);   
-	echo json_encode([$result]);
+	else
+	{
+		$result   	=	array(
+	  							'Result'=>0,
+								'Message'=>'Invalid Access'
+								);   
+		echo json_encode([$result]);
+	}
 
 	function invokeGetFeedSubmissionListByNextToken(MarketplaceWebService_Interface 
 													$service, $request) 
