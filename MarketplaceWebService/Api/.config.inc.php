@@ -34,6 +34,28 @@
     ***********************************************************************/
     define ('MERCHANT_ID', 'A3GFS76MQYB21E');
     
+    /************************************************************************
+    * REQUIRED
+    * 
+    * All MWS requests must contain the seller's marketplace ID and
+    ***********************************************************************/
+    define ('MARKETPLACE_ID1', 'A21TJRUUN4KGV');
+
+    /************************************************************************
+    * REQUIRED
+    * 
+    * All MWS requests must contain the seller's MWS authorisation token id and
+    ***********************************************************************/
+    define ('MWSAUTHORISATIONTOKEN', 'amzn.mws.c8aecbfd-882c-f4fe-5aff-a0cd3004e6b6');
+
+    /************************************************************************
+    * REQUIRED
+    * 
+    * All MWS requests must contain the seller's MWS authorisation web access url and
+    ***********************************************************************/
+    define ('MWSSERVICEURL', 'https://mws.amazonservices.in');
+
+
    /************************************************************************ 
     * OPTIONAL ON SOME INSTALLATIONS
     *

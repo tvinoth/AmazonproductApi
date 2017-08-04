@@ -13,49 +13,75 @@
 */
 	//include mws credentials
 	include_once ('.config.inc.php'); 
-	$serviceUrl = 	"https://mws.amazonservices.in";
-	$config 	= 	array 
-						(
-							'ServiceURL' => $serviceUrl,
-							'ProxyHost' => null,
-							'ProxyPort' => -1,
-							'MaxErrorRetry' => 3,
-						);
+    if($_SERVER['REQUEST_METHOD']   ==  "POST")
+    {
+        $productFileType    =   pathinfo($_FILES['productupload']['name'],PATHINFO_EXTENSION);
+        $supportfiletype    =   array('xml','xcd','xlsx','xlsm');
+        //check file type
+        $checkFileTyep      =   in_array($productFileType,$supportfiletype);
+        if($checkFileTyep != true)
+        {
+            $result         =   array(
+                                'Result'=>0,
+                                'Message'=>'Invalid file format upload file like xml,xlsx'
+                                );  
+            echo json_encode([$result]);    
+            return false;
+        }
+        //check file size 10 mb
 
-	$service 	= 	new MarketplaceWebService_Client
-						(
-							AWS_ACCESS_KEY_ID, 
-							AWS_SECRET_ACCESS_KEY, 
-							$config,
-							APPLICATION_NAME,
-							APPLICATION_VERSION
-						);
+        if ($_FILES["productupload"]["size"] < 10000000) 
+        {
+            $result         =   array(
+                                'Result'=>0,
+                                'Message'=>'File size should be below 10MB'
+                                );  
+            echo json_encode([$result]);    
+            return false;
+        }
 
-// 	$feed 		= 	<<<EOD
-// 						<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="amznenvelope.xsd">
-// 	    					<Header>
-// 	        					<DocumentVersion>1.01</DocumentVersion>
-// 	        					<MerchantIdentifier>MERCHANT_IDENTIFIER</MerchantIdentifier>
-// 	    					</Header>
-// 	    					<MessageType>Product</MessageType>
-// 	    					<PurgeAndReplace>false</PurgeAndReplace>
-// 	    					<Message>
-// 		        				<MessageID>1</MessageID>
-// 		        				<OperationType>Update</OperationType>
-// 		        				<Product>
-// 		            			<SKU>UNIQUE-TO-ME-1234</SKU>
-// 		            			<StandardProductID>
-// 		                		<Type>ASIN</Type>
-// 		                		<Value>B000A0S46M</Value>
-// 		            			</StandardProductID>
-// 		            			<Condition>
-// 		                			<ConditionType>New</ConditionType>
-// 		            			</Condition>
-// 		        				</Product>
-// 	    					</Message>
-// 						</AmazonEnvelope>
-// EOD;
-        $filename   =   $_SERVER['DOCUMENT_ROOT'].'/productapi/product.xlsx';
+    	$config 	= 	array 
+    						(
+    							'ServiceURL' => MWSSERVICEURL,
+    							'ProxyHost' => null,
+    							'ProxyPort' => -1,
+    							'MaxErrorRetry' => 3,
+    						);
+
+    	$service 	= 	new MarketplaceWebService_Client
+    						(
+    							AWS_ACCESS_KEY_ID, 
+    							AWS_SECRET_ACCESS_KEY, 
+    							$config,
+    							APPLICATION_NAME,
+    							APPLICATION_VERSION
+    						);
+
+    // 	$feed 		= 	<<<EOD
+    // 						<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="amznenvelope.xsd">
+    // 	    					<Header>
+    // 	        					<DocumentVersion>1.01</DocumentVersion>
+    // 	        					<MerchantIdentifier>MERCHANT_IDENTIFIER</MerchantIdentifier>
+    // 	    					</Header>
+    // 	    					<MessageType>Product</MessageType>
+    // 	    					<PurgeAndReplace>false</PurgeAndReplace>
+    // 	    					<Message>
+    // 		        				<MessageID>1</MessageID>
+    // 		        				<OperationType>Update</OperationType>
+    // 		        				<Product>
+    // 		            			<SKU>UNIQUE-TO-ME-1234</SKU>
+    // 		            			<StandardProductID>
+    // 		                		<Type>ASIN</Type>
+    // 		                		<Value>B000A0S46M</Value>
+    // 		            			</StandardProductID>
+    // 		            			<Condition>
+    // 		                			<ConditionType>New</ConditionType>
+    // 		            			</Condition>
+    // 		        				</Product>
+    // 	    					</Message>
+    // 						</AmazonEnvelope>
+    // EOD;
+        $filename   =   $_FILES["productupload"]["tmp_name"];
         // $row = 1;
         // if (($handle = fopen($filename, "r")) !== FALSE) 
         // {
@@ -71,7 +97,7 @@
 		$feedHandle 	= 	@fopen('php://temp', 'rw+');
 		fwrite($feedHandle, $filename);
 		rewind($feedHandle);
-		$marketplaceIdArray 	= 	array("Id" => array('A21TJRUUN4KGV'));
+		$marketplaceIdArray 	= 	array("Id" => array(MARKETPLACE_ID1));
 		$request 		= 	new MarketplaceWebService_Model_SubmitFeedRequest();
 		$request->setMerchant(MERCHANT_ID);
 		$request->setMarketplaceIdList($marketplaceIdArray);
@@ -80,11 +106,17 @@
 		rewind($feedHandle);
 		$request->setPurgeAndReplace(false);
 		$request->setFeedContent($feedHandle);
-		$request->setMWSAuthToken('A355AK059F1Q32'); // Optional
+		$request->setMWSAuthToken(MWSAUTHORISATIONTOKEN); // Optional
 		rewind($feedHandle);
 		invokeSubmitFeed($service, $request);
 		@fclose($feedHandle);
-	
+    }
+	$result    =   array(
+                            'Result'=>0,
+                            'Message'=>'Invalid Access'
+                            );   
+    echo json_encode([$result]);
+
 	function invokeSubmitFeed(MarketplaceWebService_Interface $service, $request) 
   	{
       	try 

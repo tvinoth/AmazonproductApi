@@ -13,9 +13,9 @@
 */
 	//include mws credentials
 	include_once ('.config.inc.php'); 
-	if(isset($_REQUEST['sendsubmissionid']) && $_REQUEST['sendsubmissionid'] == "SubmissionResult")
+	if(isset($_POST['sendsubmissionid']) && $_POST['sendsubmissionid'] == "SubmissionResult" && $_SERVER['REQUEST_METHOD'] == "POST")
 	{
-	    $feedid   = 	$_REQUEST['submissionid'];
+	    $feedid   = 	$_POST['submissionid'];
 	    if($feedid 	==	"")
 	    {
 	    	$result   	=	array(
@@ -26,9 +26,8 @@
 			return false;
 	    }
 
-	    $serviceUrl 	= 	"https://mws.amazonservices.in";
 		$config 		= 	array (
-							'ServiceURL' => $serviceUrl,
+							'ServiceURL' => MWSSERVICEURL,
 							'ProxyHost' => null,
 							'ProxyPort' => -1,
 							'MaxErrorRetry' => 3,
@@ -47,14 +46,13 @@
 							'Merchant' => MERCHANT_ID,
 							'FeedSubmissionId' => $feedid,
 							'FeedSubmissionResult' => @fopen('php://memory', 'rw+'),
-							'MWSAuthToken' => 'amzn.mws.c8aecbfd-882c-f4fe-5aff-a0cd3004e6b6', // Optional
+							'MWSAuthToken' => MWSAUTHORISATIONTOKEN, // Optional
 						);
 		$request 	= 	new MarketplaceWebService_Model_GetFeedSubmissionResultRequest($parameters);
-		$request 	= 	new MarketplaceWebService_Model_GetFeedSubmissionResultRequest();
 		$request->setMerchant(MERCHANT_ID);
 		$request->setFeedSubmissionId($feedid);
 		$request->setFeedSubmissionResult(@fopen('php://memory', 'rw+'));
-		$request->setMWSAuthToken('amzn.mws.c8aecbfd-882c-f4fe-5aff-a0cd3004e6b6'); // Optional     
+		$request->setMWSAuthToken(MWSAUTHORISATIONTOKEN); 
 		invokeGetFeedSubmissionResult($service, $request);
 	}
 	else

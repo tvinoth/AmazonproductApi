@@ -14,10 +14,9 @@
 */
 	//include mws credentials
 	include_once ('.config.inc.php');
-	$serviceUrl = 	"https://mws.amazonservices.in";
 	$config 	= 	array 
 						(
-							'ServiceURL' => $serviceUrl,
+							'ServiceURL' => MWSSERVICEURL,
 							'ProxyHost' => null,
 							'ProxyPort' => -1,
 							'MaxErrorRetry' => 3,
