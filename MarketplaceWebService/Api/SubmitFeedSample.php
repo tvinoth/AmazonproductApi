@@ -56,30 +56,48 @@
     							APPLICATION_VERSION
     						);
 
-    // 	$feed 		= 	<<<EOD
-    // 						<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="amznenvelope.xsd">
-    // 	    					<Header>
-    // 	        					<DocumentVersion>1.01</DocumentVersion>
-    // 	        					<MerchantIdentifier>MERCHANT_IDENTIFIER</MerchantIdentifier>
-    // 	    					</Header>
-    // 	    					<MessageType>Product</MessageType>
-    // 	    					<PurgeAndReplace>false</PurgeAndReplace>
-    // 	    					<Message>
-    // 		        				<MessageID>1</MessageID>
-    // 		        				<OperationType>Update</OperationType>
-    // 		        				<Product>
-    // 		            			<SKU>UNIQUE-TO-ME-1234</SKU>
-    // 		            			<StandardProductID>
-    // 		                		<Type>ASIN</Type>
-    // 		                		<Value>B000A0S46M</Value>
-    // 		            			</StandardProductID>
-    // 		            			<Condition>
-    // 		                			<ConditionType>New</ConditionType>
-    // 		            			</Condition>
-    // 		        				</Product>
-    // 	    					</Message>
-    // 						</AmazonEnvelope>
-    // EOD;
+//     	$feed 		= 	<<<EOD
+//     						<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="amznenvelope.xsd">
+//     	    					<Header>
+//     	        					<DocumentVersion>1.01</DocumentVersion>
+//     	        					<MerchantIdentifier>MERCHANT_IDENTIFIER</MerchantIdentifier>
+//     	    					</Header>
+//     	    					<MessageType>Product</MessageType>
+//     	    					<PurgeAndReplace>false</PurgeAndReplace>
+//     	    					<Message>
+//     <MessageID>1</MessageID>
+//     <OperationType>Update</OperationType>
+//     <Product>
+//         <SKU>56789</SKU>
+//         <StandardProductID>
+//             <Type>ASIN</Type>
+//             <Value>B0EXAMPLEG</Value>
+//         </StandardProductID>
+//         <ProductTaxCode>A_GEN_NOTAX</ProductTaxCode>
+//         <DescriptionData>
+//             <Title>Example Product Title</Title>
+//             <Brand>Example Product Brand</Brand>
+//             <Description>This is an example product description.</Description>
+//             <BulletPoint>Example Bullet Point 1</BulletPoint>
+//             <BulletPoint>Example Bullet Point 2</BulletPoint>
+//             <MSRP currency="USD">25.19</MSRP>
+//             <Manufacturer>Example Product Manufacturer</Manufacturer>
+//             <ItemType>example-item-type</ItemType>
+//         </DescriptionData>
+//         <ProductData>
+//             <Health>
+//                 <ProductType>
+//                     <HealthMisc>
+//                         <Ingredients>Example Ingredients</Ingredients>
+//                         <Directions>Example Directions</Directions>
+//                     </HealthMisc>
+//                 </ProductType>
+//             </Health>
+//         </ProductData>
+//     </Product>
+//     	    					</Message>
+//     						</AmazonEnvelope>
+// EOD;
         $filename   =   $_FILES["productupload"]["tmp_name"].'.'.$_FILES['productupload']['name'];
         // $row = 1;
         // if (($handle = fopen($filename, "r")) !== FALSE) 
@@ -93,15 +111,18 @@
         //     }
         //     fclose($handle);
         // }
-		$feedHandle 	= 	@fopen('php://temp', 'rw+');
-		fwrite($feedHandle, $filename);
-		rewind($feedHandle);
+		// $feedHandle 	= 	@fopen('php://temp', 'rw+');
+		// fwrite($feedHandle, $feed);
+		// rewind($feedHandle);
+        $filename = __DIR__.'/product.xlsx';
+        $feedHandle = fopen($filename, 'w+');
 		$marketplaceIdArray 	= 	array("Id" => array(MARKETPLACE_ID1));
-		$request 		= 	new MarketplaceWebService_Model_SubmitFeedRequest();
+		$request  = 	new MarketplaceWebService_Model_SubmitFeedRequest();
 		$request->setMerchant(MERCHANT_ID);
 		$request->setMarketplaceIdList($marketplaceIdArray);
 		$request->setFeedType('_POST_PRODUCT_DATA_');
-		$con  = $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+        // _POST_INVENTORY_AVAILABILITY_DATA_
+		$request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
 		rewind($feedHandle);
 		$request->setPurgeAndReplace(false);
 		$request->setFeedContent($feedHandle);

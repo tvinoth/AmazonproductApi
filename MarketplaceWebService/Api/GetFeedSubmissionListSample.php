@@ -31,7 +31,7 @@
 						);
 	$parameters = 	array (
 						'Merchant' => MERCHANT_ID,
-						'FeedProcessingStatusList' => array ('Status' => array ('_SUBMITTED_')),
+						'FeedProcessingStatusList' => array ('Status' => array ('_SUBMITTED_','_DONE_')),
 						'MWSAuthToken' => MWSAUTHORISATIONTOKEN
 						);
 
@@ -40,6 +40,8 @@
 	$request->setMerchant(MERCHANT_ID);
 	$request->setMWSAuthToken(MWSAUTHORISATIONTOKEN);
 	
+    // $statusList     =   new MarketplaceWebService_Model_StatusList();
+    // $request->setFeedProcessingStatusList($statusList->withStatus('_SUBMITTED_','_DONE_'));
 	invokeGetFeedSubmissionList($service, $request);
 	
 	function invokeGetFeedSubmissionList(MarketplaceWebService_Interface $service, $request) 

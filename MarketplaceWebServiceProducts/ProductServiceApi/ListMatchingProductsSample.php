@@ -26,9 +26,9 @@
 						APPLICATION_NAME,
 						APPLICATION_VERSION,
 						$config);
-	$service 	= 	new MarketplaceWebServiceProducts_Mock();
 	$request 	= 	new MarketplaceWebServiceProducts_Model_ListMatchingProductsRequest();
  	$request->setSellerId(MERCHANT_ID);
+ 	$request->setQuery("redmi");
  	$request->setMarketplaceId(MARKETPLACE_ID1);
  	invokeListMatchingProducts($service, $request);
  	function invokeListMatchingProducts(MarketplaceWebServiceProducts_Interface $service, $request)
@@ -48,7 +48,7 @@
 		catch (MarketplaceWebServiceProducts_Exception $ex) 
 		{
 			$result   	=	array(
-      							'SubmitFeedResult'=>0,
+      							'ListMatchingproductresult'=>0,
 								'Caught_Exception'=>$ex->getMessage(),
 								'Response_Status_Code'=>$ex->getStatusCode(),
 								'Error_Code'=>$ex->getErrorCode(),

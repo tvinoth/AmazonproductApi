@@ -26,6 +26,9 @@
 			return false;
 	    }
 
+	    $filename = __DIR__.'/product.xlsx';
+		$handle = fopen($filename, 'w+');
+
 		$config 		= 	array (
 							'ServiceURL' => MWSSERVICEURL,
 							'ProxyHost' => null,
@@ -46,13 +49,15 @@
 							'Merchant' => MERCHANT_ID,
 							'FeedSubmissionId' => $feedid,
 							'FeedSubmissionResult' => @fopen('php://memory', 'rw+'),
-							'MWSAuthToken' => MWSAUTHORISATIONTOKEN, // Optional
+							'MWSAuthToken' => MWSAUTHORISATIONTOKEN,
 						);
 		$request 	= 	new MarketplaceWebService_Model_GetFeedSubmissionResultRequest($parameters);
 		$request->setMerchant(MERCHANT_ID);
 		$request->setFeedSubmissionId($feedid);
-		$request->setFeedSubmissionResult(@fopen('php://memory', 'rw+'));
+		$request->setFeedSubmissionResult($handle);
+		// $request->setFeedSubmissionResult(@fopen('php://memory', 'rw+'));
 		$request->setMWSAuthToken(MWSAUTHORISATIONTOKEN); 
+		
 		invokeGetFeedSubmissionResult($service, $request);
 	}
 	else
