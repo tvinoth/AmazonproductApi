@@ -28,7 +28,7 @@
 						$config);
 	$request 	= 	new MarketplaceWebServiceProducts_Model_ListMatchingProductsRequest();
  	$request->setSellerId(MERCHANT_ID);
- 	$request->setQuery("redmi");
+ 	$request->setQuery("iphone 6s mobile phones");
  	$request->setMarketplaceId(MARKETPLACE_ID1);
  	invokeListMatchingProducts($service, $request);
  	function invokeListMatchingProducts(MarketplaceWebServiceProducts_Interface $service, $request)
