@@ -130,7 +130,7 @@
      	catch (MarketplaceWebService_Exception $ex) 
      	{
         	$result   	=	array(
-      							'GetFeedSubmissionListResult'=>0,
+      							'ReportResult'=>0,
 								'Caught_Exception'=>$ex->getMessage(),
 								'Response_Status_Code'=>$ex->getStatusCode(),
 								'Error_Code'=>$ex->getErrorCode(),

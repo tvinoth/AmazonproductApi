@@ -659,7 +659,7 @@ class FBAInventoryServiceMWS_Client implements FBAInventoryServiceMWS_Interface
      * @param $ch curl handle
      */
     protected function setSSLCurlOptions($ch) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
     }
 
