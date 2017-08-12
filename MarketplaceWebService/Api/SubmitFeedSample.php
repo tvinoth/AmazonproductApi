@@ -13,7 +13,7 @@
 */
 	//include mws credentials
 	include_once ('.config.inc.php'); 
-    if($_SERVER['REQUEST_METHOD']   ==  "POST")
+    if($_SERVER['REQUEST_METHOD']   ==  "POST" && isset($_FILES['productupload']))
     {
         $productFileType    =   pathinfo($_FILES['productupload']['name'],PATHINFO_EXTENSION);
         $supportfiletype    =   array('xml','xcd','xlsx','xlsm');
@@ -97,8 +97,8 @@
 //     </Product>
 //     	    					</Message>
 //     						</AmazonEnvelope>
-// EOD;
-        $filename   =   $_FILES["productupload"]["tmp_name"].'.'.$_FILES['productupload']['name'];
+// EOD;                            
+        $filename   =   $_FILES["productupload"]["tmp_name"];
         // $row = 1;
         // if (($handle = fopen($filename, "r")) !== FALSE) 
         // {
@@ -114,7 +114,7 @@
 		// $feedHandle 	= 	@fopen('php://temp', 'rw+');
 		// fwrite($feedHandle, $feed);
 		// rewind($feedHandle);
-        $filename = __DIR__.'/product.xlsx';
+        // $filename = __DIR__.'/product.xlsx';
         $feedHandle = fopen($filename, 'w+');
 		$marketplaceIdArray 	= 	array("Id" => array(MARKETPLACE_ID1));
 		$request  = 	new MarketplaceWebService_Model_SubmitFeedRequest();
