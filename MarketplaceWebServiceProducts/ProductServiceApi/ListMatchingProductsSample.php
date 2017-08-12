@@ -41,9 +41,11 @@
 			$dom->preserveWhiteSpace = false;
 			$dom->formatOutput = true;
 			$xml 		= 	simplexml_load_string($dom->saveXML());
-			$result[] 	=	array('Listingproduct'=>$xml);
-			$result[] 	=	array('ResponseHeaderMetadata'=>$response->getResponseHeaderMetadata());
-			echo json_encode($result); 
+			echo 	$dom->saveXML();
+			echo 'ResponseHeaderMetadata : '.$response->getResponseHeaderMetadata()."\n";
+			// $result[] 	=	array('Listingproduct'=>$xml);
+			// $result[] 	=	array('ResponseHeaderMetadata'=>$response->getResponseHeaderMetadata());
+			// echo json_encode($result); 
 		} 
 		catch (MarketplaceWebServiceProducts_Exception $ex) 
 		{
